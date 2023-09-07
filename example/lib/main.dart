@@ -83,10 +83,10 @@ class _MyAppState extends State<MyApp> {
 //      });
 
       FlutterXUpdate.setUpdateHandler(
-          onUpdateError: (Map<String, dynamic> message) async {
+          onUpdateError: (Map<String, dynamic>? message) async {
         print(message);
         //下载失败
-        if (message["code"] == 4000) {
+        if (message!["code"] == 4000) {
           FlutterXUpdate.showRetryUpdateTipDialog(
               retryContent: 'Github被墙无法继续下载，是否考虑切换蒲公英下载？',
               retryUrl: 'https://www.pgyer.com/flutter_learn');
@@ -94,9 +94,10 @@ class _MyAppState extends State<MyApp> {
         setState(() {
           _message = '$message';
         });
-      }, onUpdateParse: (String json) async {
+        return 1;
+      }, onUpdateParse: (String? json) async {
         //这里是自定义json解析
-        return customParseJson(json);
+        return customParseJson(json!);
       });
     } else {
       updateMessage('ios暂不支持XUpdate更新');
@@ -111,16 +112,16 @@ class _MyAppState extends State<MyApp> {
 
   ///将自定义的json内容解析为UpdateEntity实体类
   UpdateEntity customParseJson(String json) {
-    AppInfo appInfo = AppInfo.fromJson(json);
+    AppInfo? appInfo = AppInfo.fromJson(json);
     print(appInfo);
     return UpdateEntity(
-        hasUpdate: appInfo.hasUpdate,
-        isIgnorable: appInfo.isIgnorable,
-        versionCode: appInfo.versionCode,
-        versionName: appInfo.versionName,
-        updateContent: appInfo.updateLog,
-        downloadUrl: appInfo.apkUrl,
-        apkSize: appInfo.apkSize);
+        hasUpdate: appInfo?.hasUpdate,
+        isIgnorable: appInfo?.isIgnorable,
+        versionCode: appInfo?.versionCode,
+        versionName: appInfo?.versionName,
+        updateContent: appInfo?.updateLog,
+        downloadUrl: appInfo?.apkUrl,
+        apkSize: appInfo?.apkSize);
   }
 
   @override
